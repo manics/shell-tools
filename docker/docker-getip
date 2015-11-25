@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+        CIDS=$(docker ps -q)
+else
+        CIDS="$@"
+fi
+FORMAT="{{ .NetworkSettings.IPAddress }} {{ .Config.Image }}"
+for c in $CIDS; do
+        IP=$(docker inspect --format "$FORMAT" "$c")
+        echo $c $IP
+done
+
