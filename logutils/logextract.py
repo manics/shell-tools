@@ -15,7 +15,7 @@ datereparts = (
     '(?P<day>\d{2})',
     '[Tt\s]+(?P<hour>\d{1,2})[:]?',
     '(?P<minute>\d{2})[:]?',
-    '(?P<second>\d{2}),?',
+    '(?P<second>\d{2})[,\.]?',
     '(?P<fracsecond>\d*)',
     )
 
@@ -158,10 +158,13 @@ if __name__ == '__main__':
     except ValueError as e:
         sys.stderr.write(e.message)
         sys.stderr.write("""
-USAGE: %s logfile.log start [duration]
+USAGE: {0} logfile.log start [duration]
     start should be an isodatetime with optional right-hand parts omitted
         e.g. "2015-01-01 01:23:34" "2015-01-01 01" "2015-01"
     duration should be comprised of units [d]ay, [h]our [m]inute, [s]econd
         e.g. "1d2h3m" "65m" "2d98s"
-""" % os.path.basename(sys.argv[0]))
+    e.g. {0} input.log 2015-01-02
+         {0} input.log "2015-01-02 14:30" 2h
+         {0} input.log "2015-01-02 14:45:52" 3m20s
+""".format(os.path.basename(sys.argv[0])))
         sys.exit(1)
