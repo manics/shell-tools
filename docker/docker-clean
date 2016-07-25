@@ -1,8 +1,14 @@
 #!/bin/bash
+
+FORCE=0
+if [ "${1:-}" = "-f" ]; then
+	FORCE=1
+fi
+
 CIDS="$(docker ps -aq)"
 if [ -n "$CIDS" ]; then
 	read -p "Delete containers ${CIDS//$'\n'/ }? [y/N] " r
-	if [ "$r" = "y" -o "$r" = "Y" ]; then
+	if [ "$FORCE" -eq 1 -o "$r" = "y" -o "$r" = "Y" ]; then
 		docker rm -v $CIDS
 	fi
 fi
@@ -10,7 +16,7 @@ fi
 IIDS="$(docker images -q -f dangling=true)"
 if [ -n "$IIDS" ]; then
 	read -p "Delete images ${IIDS//$'\n'/ }? [y/N] " r
-	if [ "$r" = "y" -o "$r" = "Y" ]; then
+	if [  "$FORCE" -eq 1 -o "$r" = "y" -o "$r" = "Y" ]; then
 		docker rmi $IIDS
 	fi
 fi
