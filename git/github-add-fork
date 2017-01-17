@@ -1,0 +1,17 @@
+#!/bin/sh
+# Add a github fork
+
+[ $# -eq 1 ] || {
+    echo "USAGE: `basename $0` gh-user"
+    exit 2
+}
+
+GHUSER="$1"
+REMOTE=`git config --get remote.origin.url` || {
+    echo "Failed to get remote"
+    exit 2
+}
+ADDREMOTE=`echo "$REMOTE" | sed -E "s/(.+:)?[^/]+(\/[^/]+)$/\1$GHUSER\2/"`
+echo Adding "$GHUSER" "$ADDREMOTE"
+git remote add "$GHUSER" "$ADDREMOTE"
+

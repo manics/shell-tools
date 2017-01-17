@@ -1,0 +1,16 @@
+#!/bin/bash
+# Shows commits in the current branch which do not have upstream equivalents
+set -eu
+
+UPSTREAM=origin/master
+CMD=show
+if [ $# -eq 1 ]; then
+    UPSTREAM="$1"
+elif [ $# -eq 2 ]; then
+    UPSTREAM="$2"
+    CMD="$1"
+elif [ $# -gt 2 ]; then
+    echo "Usage: $(basename "$0") [[command-arguments] upstream]"
+    exit 1
+fi
+git $CMD $(git cherry "$UPSTREAM" | grep '^+' | cut -d\  -f2)

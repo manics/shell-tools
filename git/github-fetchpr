@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+	echo "USAGE: $(basename $0) PR"
+	echo "       $(basename $0) remote PR ..."
+	exit 2
+fi
+
+REMOTE=origin
+if [ $# -gt 1 ]; then
+    REMOTE="$1"
+    shift
+fi
+PR=$1
+shift
+git fetch "$REMOTE" "pull/$PR/head:pr$PR" "$@" || \
+     git fetch "$REMOTE" "pull/$PR/head" "$@"
+
